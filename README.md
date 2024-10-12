@@ -27,3 +27,10 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+### Starts JSON Server to mock API calls with
+
+```sh
+json-server --watch db.json --port 3000
+```
