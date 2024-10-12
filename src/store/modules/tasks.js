@@ -59,12 +59,11 @@ const actions = {
     async edittask({ commit, state }, { taskID, payload }) {
         try {
             await axios.put(`tasks/${taskID}`, payload);
-            // Update the tasks in the state after successful edit
             const index = state.tasks.findIndex(task => task.id === taskID);
             if (index !== -1) {
                 const updatedTasks = [...state.tasks];
-                updatedTasks[index] = { ...updatedTasks[index], ...payload }; // Update the task
-                commit('SET_tasks', updatedTasks); // Commit the updated tasks
+                updatedTasks[index] = { ...updatedTasks[index], ...payload };
+                commit('SET_tasks', updatedTasks);
             }
         } catch (error) {
             console.error('Error updating task:', error);
