@@ -87,10 +87,10 @@ store.dispatch("tasks/Gettask", route.params.id);
 
 const rules = {
   title: {
-    required: helpers.withMessage("Name is required", required),
+    required: helpers.withMessage("title is required", required),
   },
   description: {
-    required: helpers.withMessage("Name is required", required),
+    required: helpers.withMessage("description is required", required),
   },
   status: {
     required: helpers.withMessage("Status is required", required),

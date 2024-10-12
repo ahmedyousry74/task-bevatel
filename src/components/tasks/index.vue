@@ -35,34 +35,39 @@
         :items="gettasks"
         hide-default-footer
       >
-      <template v-slot:item.status="{ item }">
-        <v-chip class="ma-2" color="#f694a2" v-if="item.status == 'todo'">
-          <v-icon class="!text-xs mx-1 text-[#E02D3C]"> mdi-circle </v-icon>
-          <span class="text-[#E02D3C] !font-medium">
-            {{ item.status }}
-          </span>
-        </v-chip>
-        <v-chip
-          class="ma-2 text-white !bg-[#FDECEC]"
-          v-if="item.status == 'done'"
-        >
-          <v-icon class="!text-xs mx-1 text-[#027A48]"> mdi-circle </v-icon>
-          <span class="text-[#027A48] font-medium">
-            {{ item.status }}
-          </span>
-        </v-chip>
-        <v-chip
-          class="ma-2 text-white !bg-[#FDECEC]"
-          v-if="item.status == 'inProgress'"
-        >
-          <v-icon class="!text-xs mx-1 text-[#027A48]"> mdi-circle </v-icon>
-          <span class="text-[#027A48] font-medium">
-            {{ item.status }}
-          </span>
-        </v-chip>
-      </template>
+        <template v-slot:item.status="{ item }">
+          <v-chip class="ma-2" color="#f694a2" v-if="item.status == 'todo'">
+            <v-icon class="!text-xs mx-1 text-[#E02D3C]"> mdi-circle </v-icon>
+            <span class="text-[#E02D3C] !font-medium">
+              {{ item.status }}
+            </span>
+          </v-chip>
+          <v-chip
+            class="ma-2 text-white !bg-[#FDECEC]"
+            v-if="item.status == 'done'"
+          >
+            <v-icon class="!text-xs mx-1 text-[#027A48]"> mdi-circle </v-icon>
+            <span class="text-[#027A48] font-medium">
+              {{ item.status }}
+            </span>
+          </v-chip>
+          <v-chip
+            class="ma-2 text-white !bg-[#FDECEC]"
+            v-if="item.status == 'inProgress'"
+          >
+            <v-icon class="!text-xs mx-1 text-[#027A48]"> mdi-circle </v-icon>
+            <span class="text-[#027A48] font-medium">
+              {{ item.status }}
+            </span>
+          </v-chip>
+        </template>
+        <template v-slot:item.done_check="{ item }">
+          <v-checkbox :model-value="item.status === 'done'" @change="updateTaskStatus(item)"></v-checkbox>
+        </template>
         <template v-slot:item.action="{ item }">
-          <div class="flex justify-center items-center flex-row flex-wrap gap-3">
+          <div
+            class="flex justify-center items-center flex-row flex-wrap gap-3"
+          >
             <router-link
               :to="{
                 name: 'edittask',
@@ -91,6 +96,8 @@ import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
+const doneTask = ref(false)
+
 const headers = ref([
   {
     title: "ID",
@@ -101,6 +108,7 @@ const headers = ref([
   { title: "Title", key: "title", align: "start" },
   { title: "Description", key: "description", align: "start" },
   { title: "Status", key: "status", align: "start" },
+  { title: "Done task", key: "done_check", align: "start" },
   { title: "Actions", key: "action", align: "start" },
 ]);
 
@@ -110,6 +118,16 @@ const loading = ref(true);
 const gettasks = computed(() => store.getters["tasks/gettasks"]);
 const getLoading = computed(() => store.getters["tasks/getLoading"]);
 store.dispatch("tasks/handleGettasks");
+
+
+const updateTaskStatus = async (item) => {
+  const newStatus = item.status === 'done' ? 'todo' : 'done'; 
+  const payload = { ...item, status: newStatus };
+  await store.dispatch('tasks/edittask', { taskID: item.id, payload });
+  store.dispatch('tasks/handleGettasks');
+}
+
+
 </script>
 
 <style lang="scss" scoped></style>

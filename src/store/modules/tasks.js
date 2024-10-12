@@ -56,16 +56,22 @@ const actions = {
             commit('SET_LOADING', false);
         }
     },
-    async edittask({ commit }, { taskID, payload }) {
+    async edittask({ commit, state }, { taskID, payload }) {
         try {
-            const res = await axios.put(`tasks/${taskID}`, payload)
-        }
-        catch (error) {
-        }
-        finally{
+            await axios.put(`tasks/${taskID}`, payload);
+            // Update the tasks in the state after successful edit
+            const index = state.tasks.findIndex(task => task.id === taskID);
+            if (index !== -1) {
+                const updatedTasks = [...state.tasks];
+                updatedTasks[index] = { ...updatedTasks[index], ...payload }; // Update the task
+                commit('SET_tasks', updatedTasks); // Commit the updated tasks
+            }
+        } catch (error) {
+            console.error('Error updating task:', error);
+        } finally {
             commit('SET_LOADING', false);
         }
-    },
+    },    
     async Deletetask({ commit }, SelecttaskID) {
         try {
             const res = await axios.delete(`tasks/${SelecttaskID}`)
