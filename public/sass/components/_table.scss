@@ -1,0 +1,23 @@
+.tasks__layout{
+    .v-table{
+        .v-table__wrapper{
+            border-radius: 8px;
+        }
+        thead{
+            tr{
+                background: var(--primary-color) !important;
+                color: #fff !important;
+            }
+        }
+        tbody{
+            tr{
+                &:nth-child(even){
+                    background-color: #e4e1e142;
+                }
+            }
+        }
+    }
+    tr:not(:last-child) > td, .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
+        border-bottom: thin solid rgb(188 188 188 / 12%) !important;
+    }
+}
