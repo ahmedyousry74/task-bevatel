@@ -127,11 +127,11 @@
             </span>
           </v-chip>
           <v-chip
-            class="ma-2 text-white !bg-[#FDECEC]"
+            class="ma-2 text-white !bg-[#1cff462e]"
             v-if="item.status == 'done'"
           >
-            <v-icon class="!text-xs mx-1 text-[#027A48]"> mdi-circle </v-icon>
-            <span class="text-[#027A48] font-medium">
+            <v-icon class="!text-xs mx-1 text-[#568b67]"> mdi-circle </v-icon>
+            <span class="text-[#568b67] font-medium">
               {{ item.status }}
             </span>
           </v-chip>
