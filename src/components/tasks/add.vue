@@ -55,7 +55,7 @@
   </section>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
@@ -64,59 +64,64 @@ import { useVuelidate } from "@vuelidate/core";
 import {
   required,
   helpers,
-  numeric,
-  email,
-  minLength,
-  maxLength
 } from "@vuelidate/validators";
+
+// Initialize router, store, and toast
 const router = useRouter();
 const store = useStore();
 const toast = useToast();
-const loading = ref(false);
-const taskDATA = reactive({
+const loading = ref<boolean>(false);
+
+// Reactive state for task data
+const taskDATA = reactive<{
+  title: string;
+  description: string;
+  status: string | null; // status can be a string or null
+}>({
   title: "",
   description: "",
   status: null,
 });
 
+// Validation rules
 const rules = {
   title: {
-    required: helpers.withMessage("title is required", required),
+    required: helpers.withMessage("Title is required", required),
   },
   description: {
-    required: helpers.withMessage("description is required", required),
+    required: helpers.withMessage("Description is required", required),
   },
   status: {
     required: helpers.withMessage("Status is required", required),
   },
 };
 
+// Computed payload for the task
 const taskPAYLOAD = computed(() => {
-  const PAYLOAD = {
+  return {
     title: taskDATA.title,
     description: taskDATA.description,
     status: taskDATA.status,
   };
-  return PAYLOAD;
 });
 
+// Vuelidate instance for form validation
 const task$ = useVuelidate(rules, taskDATA);
 
-
+// Submit function to handle form submission
 const submit = async () => {
-  loading.value = false;
+  loading.value = true; // Set loading to true at the beginning
   try {
     const validateForm = await task$.value.$validate();
     if (validateForm) {
-      loading.value = true;
       await store.dispatch("tasks/handleAddtask", taskPAYLOAD.value);
-        toast.success('task Added successfully');
-        router.push("/tasks");
+      toast.success("Task added successfully");
+      router.push("/tasks");
     }
   } catch (error) {
-    toast.error("Something is error");
+    toast.error("Something went wrong");
   } finally {
-    loading.value = false;
+    loading.value = false; // Ensure loading is set to false in finally
   }
 };
 </script>

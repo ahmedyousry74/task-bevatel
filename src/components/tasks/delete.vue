@@ -27,36 +27,42 @@
   </v-dialog>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
-import { ref, computed, reactive, defineProps } from "vue";
+import { ref, defineProps } from "vue";
+
+// Initialize router, store, and toast
 const router = useRouter();
 const store = useStore();
 const toast = useToast();
-const loading = ref(false);
-const isActive = ref(false);
 
-const { taskID } = defineProps({
-  taskID: Number,
-});
+// Loading state and active state
+const loading = ref<boolean>(false);
+const isActive = ref<boolean>(false);
 
+// Define props with TypeScript
+const props = defineProps<{
+  taskID: number; // Define taskID prop as a number
+}>();
+
+// Function to delete the task
 const Deletetask = async () => {
-  loading.value = false;
+  loading.value = true; // Set loading to true at the beginning
   try {
-    const SelecttaskID = taskID;
+    const SelecttaskID = props.taskID; // Use props.taskID
     await store.dispatch("tasks/Deletetask", SelecttaskID);
-    toast.success("deleted successful");
-    isActive.value = false;
-    loading.value = true;
+    toast.success("Deleted successfully");
+    isActive.value = false; // Hide active state
   } catch (err) {
-    toast.error("error");
+    toast.error("Error");
   } finally {
-    loading.value = false;
-    isActive.value = false;
+    loading.value = false; // Ensure loading is set to false in finally
+    isActive.value = false; // Reset active state
   }
 };
 </script>
+
 
 <style lang="scss" scoped></style>

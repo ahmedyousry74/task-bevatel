@@ -89,22 +89,30 @@
   </section>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 import deletetask from "./delete.vue";
 import filtertask from "./filter.vue";
-import { ref, computed, watch } from "vue";
-import { useStore } from "vuex";
+
+// Define types for task and task state
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  status: "todo" | "done" | "inProgress";
+}
+
+interface TaskState {
+  tasks: Task[];
+  loading: boolean;
+}
+
 const store = useStore();
 
-const doneTask = ref(false)
-
+// Define headers
 const headers = ref([
-  {
-    title: "ID",
-    align: "start",
-    sortable: false,
-    key: "id",
-  },
+  { title: "ID", align: "start", sortable: false, key: "id" },
   { title: "Title", key: "title", align: "start" },
   { title: "Description", key: "description", align: "start" },
   { title: "Status", key: "status", align: "start" },
@@ -112,22 +120,24 @@ const headers = ref([
   { title: "Actions", key: "action", align: "start" },
 ]);
 
-const loading = ref(true);
+// Get tasks from the Vuex store
+const gettasks = computed<Task[]>(() => store.getters["tasks/gettasks"]);
 
-// Get task data
-const gettasks = computed(() => store.getters["tasks/gettasks"]);
-const getLoading = computed(() => store.getters["tasks/getLoading"]);
-store.dispatch("tasks/handleGettasks");
-
-
-const updateTaskStatus = async (item) => {
+// Method to update task status
+const updateTaskStatus = async (item: Task) => {
+  // Toggle status
   const newStatus = item.status === 'done' ? 'todo' : 'done'; 
-  const payload = { ...item, status: newStatus };
+  const payload = { ...item, status: newStatus }; // Create a new payload with updated status
+  
+  // Dispatch the action to update the task
   await store.dispatch('tasks/edittask', { taskID: item.id, payload });
-  store.dispatch('tasks/handleGettasks');
+  
+  // Optionally refresh the task list after update
+  store.dispatch('tasks/handleGettasks'); // This might be optional based on your design
 }
 
-
+// Initial data fetch
+store.dispatch("tasks/handleGettasks");
 </script>
 
 <style lang="scss" scoped></style>
