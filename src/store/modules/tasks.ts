@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Define types for the task state and payload
 interface Task {
   id: number;
   title: string;
@@ -10,8 +9,8 @@ interface Task {
 
 interface State {
   tasks: Task[];
-  task: Task | null; // Could be null if no task is selected
-  filter: any; // Adjust type as necessary
+  task: Task | null; 
+  filter: any; 
   loading: boolean;
 }
 
@@ -79,8 +78,8 @@ const actions = {
   async edittask({ commit }: { commit: Function }, { taskID, payload }: { taskID: number; payload: Task }) {
     try {
       await axios.put(`tasks/${taskID}`, payload);
-      // Optionally update local state after editing
-      commit('SET_tasks', payload); // Adjust this based on your requirements
+      
+      commit('SET_tasks', payload); 
     } catch (error) {
       console.error("Error editing task:", error);
     } finally {

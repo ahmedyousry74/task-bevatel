@@ -33,33 +33,29 @@ import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
 import { ref, defineProps } from "vue";
 
-// Initialize router, store, and toast
 const router = useRouter();
 const store = useStore();
 const toast = useToast();
 
-// Loading state and active state
 const loading = ref<boolean>(false);
 const isActive = ref<boolean>(false);
 
-// Define props with TypeScript
 const props = defineProps<{
-  taskID: number; // Define taskID prop as a number
+  taskID: number; 
 }>();
 
-// Function to delete the task
 const Deletetask = async () => {
-  loading.value = true; // Set loading to true at the beginning
+  loading.value = true; 
   try {
-    const SelecttaskID = props.taskID; // Use props.taskID
+    const SelecttaskID = props.taskID; 
     await store.dispatch("tasks/Deletetask", SelecttaskID);
     toast.success("Deleted successfully");
-    isActive.value = false; // Hide active state
+    isActive.value = false; 
   } catch (err) {
     toast.error("Error");
   } finally {
-    loading.value = false; // Ensure loading is set to false in finally
-    isActive.value = false; // Reset active state
+    loading.value = false; 
+    isActive.value = false; 
   }
 };
 </script>

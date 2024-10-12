@@ -31,21 +31,18 @@
 import { ref, computed, reactive } from "vue";
 import { useStore } from "vuex";
 
-// Define a type for the filter
 interface Filter {
   search: string;
-  status: string | null; // Status can be a string or null
+  status: string | null; 
 }
 
 const store = useStore();
 
-// Reactive filter object
 const filter = reactive<Filter>({
   search: "",
   status: null,
 });
 
-// Computed property for the tasks payload
 const tasksPAYLOAD = computed(() => {
   const payload = {
     title: filter.search,
@@ -55,13 +52,11 @@ const tasksPAYLOAD = computed(() => {
   return { ...payload };
 });
 
-// Method to handle tasks filtering
 const handletasks = () => {
   store.commit("tasks/setFilter", tasksPAYLOAD.value);
   store.dispatch("tasks/handleGettasks");
 };
 
-// Status menu options
 const statusMenu = ref<{ title: string; value: string }[]>([
   {
     title: "todo",

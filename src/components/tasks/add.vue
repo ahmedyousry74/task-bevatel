@@ -66,24 +66,21 @@ import {
   helpers,
 } from "@vuelidate/validators";
 
-// Initialize router, store, and toast
 const router = useRouter();
 const store = useStore();
 const toast = useToast();
 const loading = ref<boolean>(false);
 
-// Reactive state for task data
 const taskDATA = reactive<{
   title: string;
   description: string;
-  status: string | null; // status can be a string or null
+  status: string | null; 
 }>({
   title: "",
   description: "",
   status: null,
 });
 
-// Validation rules
 const rules = {
   title: {
     required: helpers.withMessage("Title is required", required),
@@ -96,7 +93,6 @@ const rules = {
   },
 };
 
-// Computed payload for the task
 const taskPAYLOAD = computed(() => {
   return {
     title: taskDATA.title,
@@ -105,12 +101,10 @@ const taskPAYLOAD = computed(() => {
   };
 });
 
-// Vuelidate instance for form validation
 const task$ = useVuelidate(rules, taskDATA);
 
-// Submit function to handle form submission
 const submit = async () => {
-  loading.value = true; // Set loading to true at the beginning
+  loading.value = true; 
   try {
     const validateForm = await task$.value.$validate();
     if (validateForm) {
@@ -121,7 +115,7 @@ const submit = async () => {
   } catch (error) {
     toast.error("Something went wrong");
   } finally {
-    loading.value = false; // Ensure loading is set to false in finally
+    loading.value = false; 
   }
 };
 </script>

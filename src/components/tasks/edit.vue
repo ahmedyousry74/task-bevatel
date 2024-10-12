@@ -49,7 +49,7 @@
         </v-btn>
       </template>
       <template v-else>
-        <p>Loading task details...</p> <!-- Fallback content while loading -->
+        <p>Loading task details...</p>
       </template>
     </div>
   </section>
@@ -68,7 +68,6 @@ import {
   helpers,
 } from "@vuelidate/validators";
 
-// Define task type
 interface Task {
   title: string;
   description: string;
@@ -80,18 +79,15 @@ const route = useRoute();
 const store = useStore();
 const toast = useToast();
 const loading = ref(false);
-const taskLoading = ref(true); // New loading state for task data
+const taskLoading = ref(true); 
 
-// get task details
 const Gettask = computed<Task | null>(() => store.getters["tasks/gettask"]);
 
-// Fetch task details when the component is mounted
 onMounted(async () => {
   await store.dispatch("tasks/Gettask", route.params.id);
-  taskLoading.value = false; // Set loading to false after fetching
+  taskLoading.value = false; 
 });
 
-// Validation rules
 const rules = {
   title: {
     required: helpers.withMessage("Title is required", required),
@@ -104,9 +100,8 @@ const rules = {
   },
 };
 
-// Compute task payload based on Gettask
 const taskPAYLOAD = computed((): Partial<Task> => {
-  if (!Gettask.value) return {}; // Ensure safety
+  if (!Gettask.value) return {}; 
   return {
     title: Gettask.value.title,
     description: Gettask.value.description,
@@ -117,7 +112,7 @@ const taskPAYLOAD = computed((): Partial<Task> => {
 const task$ = useVuelidate(rules, Gettask);
 
 const submit = async () => {
-  loading.value = true; // Set loading to true at the beginning
+  loading.value = true; 
   try {
     const validateForm = await task$.value.$validate();
     if (validateForm) {
@@ -131,7 +126,7 @@ const submit = async () => {
   } catch (error) {
     toast.error("Error editing task");
   } finally {
-    loading.value = false; // Ensure loading is set to false in finally
+    loading.value = false; 
   }
 };
 </script>

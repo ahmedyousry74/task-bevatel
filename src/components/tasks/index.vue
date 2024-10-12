@@ -95,7 +95,6 @@ import { useStore } from "vuex";
 import deletetask from "./delete.vue";
 import filtertask from "./filter.vue";
 
-// Define types for task and task state
 interface Task {
   id: number;
   title: string;
@@ -110,7 +109,6 @@ interface TaskState {
 
 const store = useStore();
 
-// Define headers
 const headers = ref([
   { title: "ID", align: "start", sortable: false, key: "id" },
   { title: "Title", key: "title", align: "start" },
@@ -120,23 +118,17 @@ const headers = ref([
   { title: "Actions", key: "action", align: "start" },
 ]);
 
-// Get tasks from the Vuex store
 const gettasks = computed<Task[]>(() => store.getters["tasks/gettasks"]);
 
-// Method to update task status
 const updateTaskStatus = async (item: Task) => {
-  // Toggle status
   const newStatus = item.status === 'done' ? 'todo' : 'done'; 
-  const payload = { ...item, status: newStatus }; // Create a new payload with updated status
+  const payload = { ...item, status: newStatus }; 
   
-  // Dispatch the action to update the task
   await store.dispatch('tasks/edittask', { taskID: item.id, payload });
   
-  // Optionally refresh the task list after update
-  store.dispatch('tasks/handleGettasks'); // This might be optional based on your design
+  store.dispatch('tasks/handleGettasks'); 
 }
 
-// Initial data fetch
 store.dispatch("tasks/handleGettasks");
 </script>
 
