@@ -12,7 +12,7 @@
     >
       <v-text-field
         density="comfortable"
-        placeholder="Name"
+        placeholder="title"
         prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
         class="w-full"
@@ -23,7 +23,7 @@
       ></v-text-field>
       <v-text-field
         density="comfortable"
-        placeholder="Name"
+        placeholder="description"
         prepend-inner-icon="mdi-account-circle-outline"
         variant="outlined"
         class="w-full"
@@ -31,18 +31,6 @@
         :error-messages="task$.description.$errors.map((e) => e.$message)"
         @blur="task$.description.$touch"
         @input="task$.description.$touch"
-      ></v-text-field>
-
-      <v-text-field
-        class="w-full"
-        density="comfortable"
-        placeholder="Email address"
-        prepend-inner-icon="mdi-phone"
-        variant="outlined"
-        v-model="Gettask.phone"
-        :error-messages="task$.phone.$errors.map((e) => e.$message)"
-        @blur="task$.phone.$touch"
-        @input="task$.phone.$touch"
       ></v-text-field>
       <v-autocomplete
         class="w-full"
@@ -104,16 +92,6 @@ const rules = {
   description: {
     required: helpers.withMessage("Name is required", required),
   },
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Email is not valid", email),
-  },
-  phone: {
-    required: helpers.withMessage("Phone is required", required),
-    numeric: helpers.withMessage("Phone is not valid", numeric),
-    minLength: helpers.withMessage("Phone must be 11 digit", minLength(11)),
-    maxLength: helpers.withMessage("Phone must be 11 digit", maxLength(11)),
-  },
   status: {
     required: helpers.withMessage("Status is required", required),
   },
@@ -121,9 +99,8 @@ const rules = {
 
 const taskPAYLOAD = computed(() => {
   const PAYLOAD = {
-    name: Gettask.value.name,
-    email: Gettask.value.email,
-    phone: Gettask.value.phone,
+    title: Gettask.value.title,
+    description: Gettask.value.description,
     status: Gettask.value.status,
   };
   return PAYLOAD;
